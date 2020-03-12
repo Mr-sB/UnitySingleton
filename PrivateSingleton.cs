@@ -1,7 +1,7 @@
 /// <summary>
 /// Lazy. Thread safe. Support private constructor
 /// </summary>
-public class PrivateSingleton<T> where T : PrivateSingleton<T>
+public abstract class PrivateSingleton<T> where T : PrivateSingleton<T>
 {
     //Lazy
     public static T Instance => Nested.Instance;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>, new()
+public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>, new()
 {
 #if UNITY_EDITOR
     private static bool _onApplicationQuit;
