@@ -1,7 +1,7 @@
 /// <summary>
 /// Lazy. Thread safe. Public constructor
 /// </summary>
-public abstract class PublicSingleton<T> where T : PublicSingleton<T>, new()
+public abstract class Singleton<T> where T : Singleton<T>, new()
 {
     //Lazy
     public static T Instance => Nested.Instance;
