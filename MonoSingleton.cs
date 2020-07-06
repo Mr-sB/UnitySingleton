@@ -38,6 +38,8 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
     {
         if(instance == null)
             instance = this as T;
+        else if (this != instance)
+            Destroy(this);
     }
 
 #if UNITY_EDITOR
