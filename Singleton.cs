@@ -1,13 +1,37 @@
-/// <summary>
-/// Lazy. Thread safe. Public constructor
-/// </summary>
-public abstract class Singleton<T> where T : Singleton<T>, new()
+namespace GameUtil
 {
-    //Lazy
-    public static T Instance => Nested.Instance;
-    private static class Nested
+    /// <summary>
+    /// Lazy. Thread safe. Public constructor
+    /// </summary>
+    public abstract class Singleton<T> where T : Singleton<T>, new()
     {
-        //Thread safe
-        internal static readonly T Instance = new T();
+        private static readonly object lockObj = new object();
+        private static T instance;
+
+        public static T Instance
+        {
+            //Lazy
+            get
+            {
+                if (instance == null)
+                {
+                    //Thread safe
+                    lock (lockObj)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new T();
+                            instance.OnStart();
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+
+        protected virtual void OnStart()
+        {
+        }
     }
 }
