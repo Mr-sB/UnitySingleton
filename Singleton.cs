@@ -8,6 +8,17 @@ namespace GameUtil
         private static readonly object lockObj = new object();
         private static T instance;
 
+        public static bool IsInstance
+        {
+            get
+            {
+                lock (lockObj)
+                {
+                    return instance != null;
+                }
+            }
+        }
+        
         public static T Instance
         {
             //Lazy
@@ -30,7 +41,23 @@ namespace GameUtil
             }
         }
 
+        public static void Remove()
+        {
+            lock (lockObj)
+            {
+                if (instance != null)
+                {
+                    instance.OnRemove();
+                    instance = null;
+                }
+            }
+        }
+        
         protected virtual void OnStart()
+        {
+        }
+
+        protected virtual void OnRemove()
         {
         }
     }

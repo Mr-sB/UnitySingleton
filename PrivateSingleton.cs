@@ -1,3 +1,6 @@
+using System;
+using UnityEngine;
+
 namespace GameUtil
 {
     /// <summary>
@@ -8,6 +11,17 @@ namespace GameUtil
         private static readonly object lockObj = new object();
         private static T instance;
 
+        public static bool IsInstance
+        {
+            get
+            {
+                lock (lockObj)
+                {
+                    return instance != null;
+                }
+            }
+        }
+        
         public static T Instance
         {
             //Lazy
@@ -20,8 +34,18 @@ namespace GameUtil
                     {
                         if (instance == null)
                         {
-                            instance = System.Activator.CreateInstance(typeof(T), true) as T;
-                            instance?.OnStart();
+                            try
+                            {
+                                instance = Activator.CreateInstance(typeof(T), true) as T;
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogError(e);
+                            }
+                            finally
+                            {
+                                instance?.OnStart();
+                            }
                         }
                     }
                 }
@@ -30,7 +54,23 @@ namespace GameUtil
             }
         }
 
+        public static void Remove()
+        {
+            lock (lockObj)
+            {
+                if (instance != null)
+                {
+                    instance.OnRemove();
+                    instance = null;
+                }
+            }
+        }
+        
         protected virtual void OnStart()
+        {
+        }
+
+        protected virtual void OnRemove()
         {
         }
     }
